@@ -2,32 +2,41 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+// In React, it’s conventional to use on[Event] names for props which represent events 
+// and handle[Event] for the methods which handle the events.
+
+function Square (props) {
+    // square no longer keeps tracker of game's state so deleting constructor
+        return (
+          <button className="square" onClick={props.onClick}>
+            {props.value}
+          </button>
+      );
+    }
+  
+  class Board extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        value: null,
+        squares: Array(9).fill(null),
       };
     }
 
-    render() {
-        return (
-        // <button className="square" onClick={function() { alert('click'); }}>
-        <button 
-          className="square" 
-          onClick={() => this.setState({value: 'X'})}
-        >
-          {this.state.value}
-        </button>
+    handleClick(i) {
+      const squares = this.state.squares.slice();
+      squares[i] = 'X';
+      this.setState({squares: squares});
+    }
+
+    renderSquare(i) {
+      return (
+        <Square 
+          value={this.state.squares[i]} 
+          onClick={() => this.handleClick(i)}
+          />
       );
     }
-  }
-  
-  class Board extends React.Component {
-    renderSquare(i) {
-      return <Square value={i} />;
-    }
-  
+    
     render() {
       const status = 'Next player: X';
   
